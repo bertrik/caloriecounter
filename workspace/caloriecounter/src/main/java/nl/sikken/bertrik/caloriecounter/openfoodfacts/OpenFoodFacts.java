@@ -32,6 +32,7 @@ public final class OpenFoodFacts {
 	 * Constructor.
 	 * 
 	 * @param restClient the REST client
+	 * @param storageRoot the file storage location (e.g. for cache)
 	 */
 	public OpenFoodFacts(IOpenFoodFactsApi restClient, File storageRoot) {
 		this.restClient = restClient;
