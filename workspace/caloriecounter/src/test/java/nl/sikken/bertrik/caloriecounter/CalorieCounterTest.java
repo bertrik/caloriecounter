@@ -1,6 +1,7 @@
 package nl.sikken.bertrik.caloriecounter;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -13,6 +14,7 @@ public final class CalorieCounterTest {
 	 * @throws MqttException 
 	 * 
 	 */
+	@Ignore
 	@Test
 	public void testCalorieCounter() throws MqttException {
 		ICalorieCounterConfig config = new CalorieCounterConfig(); 
