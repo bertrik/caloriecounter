@@ -1,7 +1,7 @@
 apply plugin: "application"
 apply plugin: "jacoco"
 
-mainClassName = 'nl.sikken.bertrik.SamenMetenBridge'
+mainClassName = 'nl.sikken.bertrik.caloriecounter.CalorieCounter'
 
 dependencies {
     compile libraries.slf4jlog4j
