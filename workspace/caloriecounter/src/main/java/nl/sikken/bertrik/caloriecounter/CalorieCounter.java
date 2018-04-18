@@ -104,7 +104,7 @@ public final class CalorieCounter {
     void handleMessage(String topic, String textMessage) {
     	// verify bar code
     	if (!isPossiblyBarCode(textMessage)) {
-    		LOG.info("String '{}' is probably not a bar code");
+    		LOG.info("Item '{}' is probably not a bar code, skipping", textMessage);
     		return;
     	}
 
