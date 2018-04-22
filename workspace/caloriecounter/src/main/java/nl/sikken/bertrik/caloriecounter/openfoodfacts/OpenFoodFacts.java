@@ -67,6 +67,12 @@ public final class OpenFoodFacts {
 		// get product info
 		JsonNode json = getProductInfo(barCode);
 		
+		// show name
+		JsonNode productNameNode = json.at("/product/product_name");
+		if (!productNameNode.isMissingNode()) {
+			LOG.info("Product name of {}: '{}'", barCode, productNameNode.asText());
+		}
+		
 		// calculate energy
 		try {
 			return getEnergy(json);
