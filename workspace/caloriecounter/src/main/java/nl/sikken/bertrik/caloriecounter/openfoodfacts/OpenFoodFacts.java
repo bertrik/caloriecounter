@@ -2,18 +2,18 @@ package nl.sikken.bertrik.caloriecounter.openfoodfacts;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Retriever/cacher for OpenFoodFacts.org
@@ -50,10 +50,19 @@ public final class OpenFoodFacts {
 	 * @return a new REST client.
 	 */
 	public static IOpenFoodFactsApi newRestClient(String url, int timeout) {
-		final WebTarget target = ClientBuilder.newClient().property(ClientProperties.CONNECT_TIMEOUT, timeout)
-				.property(ClientProperties.READ_TIMEOUT, timeout).target(url);
 		LOG.info("Creating new REST client for URL '{}' with timeout {}", url, timeout);
-		return WebResourceFactory.newResource(IOpenFoodFactsApi.class, target);
+		OkHttpClient client = new OkHttpClient().newBuilder()
+				.connectTimeout(timeout, TimeUnit.MILLISECONDS)
+				.writeTimeout(timeout, TimeUnit.MILLISECONDS)
+				.readTimeout(timeout, TimeUnit.MILLISECONDS)
+				.build();
+		Retrofit retrofit = new Retrofit.Builder()
+				.baseUrl(url)
+				.addConverterFactory(ScalarsConverterFactory.create())
+				.addConverterFactory(JacksonConverterFactory.create())
+				.client(client)
+				.build();
+		return retrofit.create(IOpenFoodFactsApi.class);		
 	}
 
 	/**
@@ -97,11 +106,8 @@ public final class OpenFoodFacts {
 		} else {
 			// retrieve it
 			LOG.info("Retrieving JSON for {}", barCode);
-			try {
-				json = restClient.getProductInfo(barCode);
-			} catch (WebApplicationException e) {
-				throw new IOException(e);
-			}
+			json = restClient.getProductInfo(barCode).execute().body();
+
 			// cache it
 			LOG.info("Caching JSON in {}", file.getName());
 			mapper.writeValue(file, json);

@@ -1,13 +1,10 @@
 package nl.sikken.bertrik.caloriecounter.openfoodfacts;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import com.fasterxml.jackson.databind.JsonNode;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * REST API towards world.openfoodfacts.org
@@ -15,13 +12,9 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Example URL:
  * https://world.openfoodfacts.org/api/v0/product/737628064502.json
  */
-@Path("/api/v0")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public interface IOpenFoodFactsApi {
 
-	@Path("/product/{barcode}.json")
-	@GET
-	JsonNode getProductInfo(@PathParam("barcode") String barCode);
+	@GET("/api/v0/product/{barcode}.json")
+	Call<JsonNode> getProductInfo(@Path("barcode") String barCode);
 
 }
