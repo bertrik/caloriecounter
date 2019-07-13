@@ -140,8 +140,9 @@ public final class OpenFoodFacts {
 	
 	public void start() {
 		LOG.info("Starting OpenFoodFacts retriever");
-		cacheDir.mkdirs();
-		rejectDir.mkdirs();
+		if (!cacheDir.mkdirs() || !rejectDir.mkdirs()) {
+			throw new IllegalStateException("Could not create directories");
+		}
 	}
 
 	public void stop() {
