@@ -1,16 +1,15 @@
 apply plugin: "application"
-apply plugin: "jacoco"
 
 mainClassName = 'nl.sikken.bertrik.caloriecounter.CalorieCounter'
 
 dependencies {
-    compile libraries.slf4jlog4j
+    implementation libraries.slf4jlog4j
     
-    compile libraries.mqtt_client
-    compile libraries.jackson
-	compile libraries.retrofit
+    implementation libraries.mqtt_client
+    implementation libraries.jackson
+	implementation libraries.retrofit
 	
-	testCompile libraries.retrofit_mock    
+	testImplementation libraries.retrofit_mock    
 }
 
 //Add configuration folder to classpath:
